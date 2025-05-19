@@ -6,6 +6,10 @@ export const getAllSubcategory = async (params) => {
   });
 };
 
+export const getAllSubcateByCategorySlug = async (categoryId) => {
+  return await axiosAPI.get(`/subcategory/find-subcate/${categoryId}`);
+};
+
 export const deleteASubcategory = async (subcategoryId) => {
   return await axiosAPI.delete(`/subcategory/${subcategoryId}`);
 };

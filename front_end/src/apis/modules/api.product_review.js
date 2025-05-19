@@ -5,6 +5,9 @@ export const createProductReview = async (data) => {
 };
 
 export const isReviewedAPI = async (data) => {
-    return await axiosAPI.post("/product-review/is-reviewed", data);
-  };
-  
+  return await axiosAPI.post("/product-review/is-reviewed", data);
+};
+
+export const getReviewByProduct = async (productId) => {
+  return await axiosAPI.get(`/product-review/${productId}`);
+};

@@ -1,12 +1,12 @@
 import axiosAPI from "../api.main";
 
 export const createACart = async (data) => {
-  return await axiosAPI.post("/cart", data);
+  const result = await axiosAPI.post("/cart", data);
+  return result;
 };
 
 export const updateACart = async (data) => {
   const { cartId, quantity } = data;
-  console.log(cartId, quantity)
   return await axiosAPI.patch(`/cart/${cartId}`, { quantity });
 };
 

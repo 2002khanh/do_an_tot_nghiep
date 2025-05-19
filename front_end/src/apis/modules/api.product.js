@@ -7,7 +7,7 @@ export const getAllProduct = async (params) => {
 };
 
 export const getDetailProduct = async (id) => {
-  return await axiosAPI.get(`products/${id}`);
+  return axiosAPI.get(`products/${id}`);
 };
 
 export const uploadImageProduct = async (data) => {
@@ -38,4 +38,14 @@ export const getAllProductByAmin = async (params) => {
   return await axiosAPI.get("/products/allProduct", {
     params: params,
   });
+};
+
+export const getAllDiscountProduct = async (params) => {
+  return await axiosAPI.get("/products/discount", {
+    params: params,
+  });
+};
+
+export const getAllDiscountProductId = async (id) => {
+  return await axiosAPI.get(`/products/discount/${id}`);
 };

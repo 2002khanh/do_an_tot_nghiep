@@ -15,7 +15,7 @@ app.config.productionTip = false;
 
 app.use(vue3GoogleLogin, {
   clientId:
-    "222164667301-ugi24epfi5deujjigtaldmkjgn1jco7f.apps.googleusercontent.com",
+    "39409350512-hup4ocv1ou09rv0tj0ront4gop3qogjs.apps.googleusercontent.com",
 });
 
 app.use(Antd);

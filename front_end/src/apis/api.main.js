@@ -9,10 +9,17 @@ const axiosAPI = axios.create({
   },
 });
 
+// Lưu trạng thái loading vào localStorage
+const setLoading = (isLoading) => {
+  localStorage.setItem("isLoading", JSON.stringify(isLoading));
+};
+
 // Interceptors: trước khi gửi data, header, ... thì phải chạy qua interceptors.
-// Nó nằm trung gian từ lúc gọi API tới lúc tới server
 axiosAPI.interceptors.request.use(
   function (config) {
+    // Bật loading trước khi gọi API
+    setLoading(true);
+
     // Thêm Bearer token vào header của request
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -22,6 +29,8 @@ axiosAPI.interceptors.request.use(
     return config;
   },
   function (error) {
+    // Tắt loading khi có lỗi
+    setLoading(false);
     return Promise.reject(error);
   }
 );
@@ -29,9 +38,13 @@ axiosAPI.interceptors.request.use(
 // Set up để chỉ lấy về data trong response
 axiosAPI.interceptors.response.use(
   function (response) {
+    // Tắt loading khi nhận được response
+    setLoading(false);
     return response.data.data;
   },
   function (error) {
+    // Tắt loading khi có lỗi
+    setLoading(false);
     return Promise.reject(error);
   }
 );

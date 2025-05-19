@@ -5,7 +5,6 @@ export const signUpUserApi = async (data) => {
 };
 
 export const createUserAdminApi = async (data) => {
-  console.log(data);
   return await axiosAPI.post("/users/create", data);
 };
 

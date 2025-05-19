@@ -31,6 +31,8 @@ import { ProductReviewModule } from './modules/product_review/product_review.mod
 import { ProductReview } from './modules/product_review/entities/product_review.entity';
 import { Conversation } from './modules/conversations/entities/conversation.entity';
 import { ConversationsModule } from './modules/conversations/conversations.module';
+import { Discount } from './modules/discount/entities/discount.entity';
+import { DiscountModule } from './modules/discount/discount.module';
 
 @Module({
   imports: [
@@ -60,6 +62,7 @@ import { ConversationsModule } from './modules/conversations/conversations.modul
           Wishlist,
           ProductReview,
           Conversation,
+          Discount,
         ],
         synchronize: true,
       }),
@@ -67,7 +70,7 @@ import { ConversationsModule } from './modules/conversations/conversations.modul
     }),
 
     ConfigModule.forRoot({
-      envFilePath: '.env.example',
+      envFilePath: '.env',
     }),
 
     CategoryModule,
@@ -83,6 +86,7 @@ import { ConversationsModule } from './modules/conversations/conversations.modul
     WishlistModule,
     ProductReviewModule,
     ConversationsModule,
+    DiscountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

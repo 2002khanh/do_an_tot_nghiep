@@ -92,6 +92,7 @@
 /* ---------------------------------- */
 /* Forms Reset & Styles
 ------------------------------------- */
+
 .input-custom {
   height: 51px;
   line-height: 51px;
@@ -14308,6 +14309,7 @@ span.like-icon {
   position: relative;
   z-index: 10;
   height: 100%;
+  min-height: 46vh !important;
 }
 
 .dashboard-nav,

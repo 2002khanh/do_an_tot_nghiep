@@ -13,5 +13,5 @@ export function formatDate(dateString) {
     second: "2-digit",
   });
 
-  return `${formattedTime} ${formattedDate}`;
+  return `${formattedDate} ${formattedTime} `;
 }

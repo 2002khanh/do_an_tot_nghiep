@@ -12,7 +12,7 @@
               0123456789
 
               <i class="fa-regular fa-envelope ml-2"></i>
-              kirabbq@gmail.com
+              skmedicine@gmail.com
             </div>
 
             <div>
@@ -28,7 +28,7 @@
                       border-radius: 12px;
                       margin-right: 8px;
                     "
-                    :src="`http://localhost:9000/` + userLogin.avatar"
+                    :src="`${config.MINIO_URL}${userLogin.avatar}`"
                     alt=""
                   />
                   <span style="color: white">
@@ -59,12 +59,6 @@
                     <li>
                       <router-link to="/order-history" class="f-arial"
                         >Quản lý đơn hàng</router-link
-                      >
-                    </li>
-
-                    <li>
-                      <router-link to="/my-manager-message" class="f-arial"
-                        >Liên hệ trực tuyến</router-link
                       >
                     </li>
                   </ul>
@@ -100,50 +94,92 @@
           <nav class="limiter-menu-desktop container">
             <!-- Logo desktop -->
             <a href="#" class="logo">
-              <img src="/images/icons/logo-01.png" alt="IMG-LOGO" />
+              <img src="/images/logo/logo.png" alt="IMG-LOGO" />
             </a>
 
             <!-- Menu desktop -->
             <div class="menu-desktop">
               <ul class="main-menu">
+                <!-- Mục Trang chủ -->
                 <li>
                   <router-link to="/home" class="f-arial"
                     >Trang chủ</router-link
                   >
                 </li>
 
+                <!-- Mục Giới thiệu -->
                 <li>
                   <router-link to="/about" class="f-arial"
                     >Giới thiệu</router-link
                   >
                 </li>
 
-                <li>
-                  <router-link to="/do-nuong" class="f-arial"
-                    >Thực đơn nướng</router-link
-                  >
+                <!-- Mục Danh mục có menu con -->
+                <li class="menu-item">
+                  <a href="#" class="f-arial">Danh mục</a>
+                  <ul class="sub-menu">
+                    <li>
+                      <router-link
+                        to="/danh-muc/thuc-pham-chuc-nang"
+                        class="f-arial"
+                        >Thực phẩm chức năng</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link to="/danh-muc/duoc-my-pham" class="f-arial"
+                        >Dược mỹ phẩm</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link
+                        to="/danh-muc/cham-soc-ca-nhan"
+                        class="f-arial"
+                        >Chăm sóc cá nhân</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link
+                        to="/danh-muc/cham-soc-tre-em"
+                        class="f-arial"
+                        >Chăm sóc trẻ em</router-link
+                      >
+                    </li>
+                  </ul>
                 </li>
 
                 <li>
-                  <router-link to="/do-lau" class="f-arial"
-                    >Thực đơn lẩu</router-link
+                  <router-link to="/my-manager-message" class="f-arial"
+                    >Tư vấn trực tuyến</router-link
                   >
                 </li>
-
-                <li>
-                  <router-link to="/mon-an" class="f-arial">Món ăn</router-link>
-                </li>
-                <!-- 
-                <li>
-                  <router-link to="/news" class="f-arial">Tin tức</router-link>
-                </li> -->
               </ul>
             </div>
 
             <!-- Icon header -->
             <div class="wrap-icon-header flex-w flex-r-m">
-              <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+              <div
+                class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search"
+                @click="toggleSearchModal"
+              >
                 <i class="zmdi zmdi-search"></i>
+              </div>
+
+              <div
+                id="search-modal"
+                :class="{ active: isSearchModalActive }"
+                class="search-modal"
+                @click.self="closeSearchModal"
+              >
+                <div class="search-modal-content">
+                  <input
+                    type="text"
+                    v-model="searchQuery"
+                    placeholder="Nhập tên sản phẩm..."
+                  />
+                  <button @click="performSearch" style="border-radius: 8px">
+                    Tìm kiếm
+                  </button>
+                </div>
               </div>
 
               <div
@@ -172,16 +208,34 @@
       <!-- Logo moblie -->
       <div class="logo-mobile">
         <a href="index.html"
-          ><img src="/images/icons/logo-01.png" alt="IMG-LOGO"
+          ><img src="/images/logo/logo.png" alt="IMG-LOGO"
         /></a>
       </div>
 
       <!-- Icon header -->
       <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-        <div
-          class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search"
-        >
-          <i class="zmdi zmdi-search"></i>
+        <div>
+          <div
+            class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search"
+            @click="toggleSearchModal"
+          >
+            <i class="zmdi zmdi-search"></i>
+          </div>
+
+          <div
+            id="search-modal"
+            :class="{ active: isSearchModalActive }"
+            class="search-modal"
+          >
+            <div class="search-modal-content">
+              <input
+                type="text"
+                v-model="searchQuery"
+                placeholder="Enter your search..."
+              />
+              <button @click="performSearch">Search</button>
+            </div>
+          </div>
         </div>
 
         <div
@@ -236,7 +290,8 @@
 <script>
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import config from "@/configs/config";
 
 export default {
   setup() {
@@ -244,6 +299,8 @@ export default {
     const router = useRouter();
     const isLogin = computed(() => store.state.auth.isLogin);
     const userLogin = computed(() => store.state.auth.userLogin);
+    const searchQuery = ref("");
+    const isSearchModalActive = ref(false);
 
     const totalProductOfCart = computed(
       () => store.state.cart.totalProductOfCart
@@ -252,6 +309,22 @@ export default {
     const totalProductOfWishList = computed(
       () => store.state.wishList.totalProductOfWishList
     );
+
+    const toggleSearchModal = () => {
+      isSearchModalActive.value = !isSearchModalActive.value;
+    };
+
+    const performSearch = () => {
+      toggleSearchModal();
+      router.push({
+        name: "search-product",
+        query: { search: searchQuery.value },
+      });
+    };
+
+    const closeSearchModal = () => {
+      isSearchModalActive.value = false;
+    };
 
     store.dispatch("cart/setCartAction");
     store.dispatch("wishList/setWishListAction");
@@ -266,6 +339,12 @@ export default {
       totalProductOfCart,
       totalProductOfWishList,
       userLogin,
+      config,
+      toggleSearchModal,
+      closeSearchModal,
+      performSearch,
+      searchQuery,
+      isSearchModalActive,
     };
   },
 };
@@ -311,5 +390,114 @@ export default {
 
 .icon-custom:hover {
   color: #717fe0;
+}
+
+/* new */
+.main-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.main-menu > li {
+  position: relative;
+  margin-right: 20px;
+}
+
+.main-menu > li > a,
+.main-menu > li > router-link {
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+}
+
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 200px;
+  z-index: 999;
+}
+
+.sub-menu li {
+  margin: 0;
+}
+
+.sub-menu li a,
+.sub-menu li router-link {
+  color: #333; /* Màu chữ ban đầu là màu xám nhạt */
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  transition: background 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.sub-menu li:hover {
+  background: #f0f0f0; /* Màu nền xám nhạt khi hover */
+}
+
+.sub-menu li:hover a {
+  color: #007bff; /* Màu chữ xanh nhạt khi hover */
+}
+
+.sub-menu li a {
+  display: flex;
+  align-items: center;
+}
+
+.sub-menu li:hover a {
+  transform: translateX(3px); /* Di chuyển nhẹ chữ khi hover */
+  transition: transform 0.3s; /* Hiệu ứng chuyển động mượt mà */
+}
+.menu-item:hover .sub-menu {
+  display: block;
+}
+
+.search-modal {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: top 0.5s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.search-modal.active {
+  top: 0%;
+}
+
+.search-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 500px;
+  height: 150px;
+}
+
+.search-modal-content input {
+  padding: 10px;
+  width: 100%;
+  height: 40%;
+  margin-bottom: 10px;
+}
+
+.search-modal-content button {
+  padding: 10px 20px;
+  background-color: #717fe0;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 </style>

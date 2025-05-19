@@ -2,7 +2,7 @@ import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
-  private readonly maxSize: number = 4096 * 1024; // 4MB
+  private readonly maxSize: number = 40960 * 1024; // 40MB
 
   transform(value: Express.Multer.File) {
     if (!value) throw new BadRequestException('File chưa được đính kèm');
